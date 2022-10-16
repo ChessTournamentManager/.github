@@ -1,4 +1,4 @@
-<h2>Greetings</h2>
+<h1>Greetings</h1>
 
 This is the organisation that I use for my Chess Tournament Manager project. It is an open source school project, where people who hosts tournaments can easily create pairings between players and share the current tournament standings with them.
 
