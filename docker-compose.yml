@@ -1,0 +1,39 @@
+version: '3.4'
+
+name: chess-tournament-manager
+services:
+  frontend:
+    image: frontend
+    build:
+      context: ./frontend
+      dockerfile: /Dockerfile
+    ports:
+      - 3000:3000
+  tournament-svc:
+    image: tournament-svc
+    build:
+      context: ./tournament-svc
+      dockerfile: /Dockerfile
+    ports:
+      - 8081:8081
+  round-svc:
+    image: round-svc
+    build:
+      context: ./round-svc
+      dockerfile: /Dockerfile
+    ports:
+      - 8082:8082
+  player-svc:
+    image: player-svc
+    build:
+      context: ./player-svc
+      dockerfile: /Dockerfile
+    ports:
+      - 8083:8083
+  match-svc:
+    image: match-svc
+    build:
+      context: ./match-svc
+      dockerfile: /Dockerfile
+    ports:
+      - 8084:8084
