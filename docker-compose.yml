@@ -1,39 +1,84 @@
-version: '3.4'
+version: "3.9"
 
-name: chess-tournament-manager
+name: ChessTournamentWebsite
 services:
   frontend:
+    container_name: frontend
     image: frontend
     build:
       context: ./frontend
       dockerfile: /Dockerfile
+    restart: on-failure
     ports:
       - 3000:3000
+
   tournament-svc:
+    container_name: tournament-svc
+    depends_on:
+      - tournament-db-redis
     image: tournament-svc
     build:
       context: ./tournament-svc
       dockerfile: /Dockerfile
+    restart: on-failure
     ports:
       - 8081:8081
+  tournament-db-redis:
+    container_name: tournament-db-redis
+    restart: always
+    image: redis:7.0.5-alpine
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    volumes:
+      - tournament-db-volume:/var/lib/tournament-db-redis
+
   round-svc:
+    container_name: round-svc
     image: round-svc
     build:
       context: ./round-svc
       dockerfile: /Dockerfile
+    restart: on-failure
     ports:
       - 8082:8082
+
   player-svc:
+    container_name: player-svc
+    depends_on:
+      - player-db-mongo
     image: player-svc
     build:
       context: ./player-svc
       dockerfile: /Dockerfile
+    restart: on-failure
     ports:
       - 8083:8083
+  player-db-mongo:
+    container_name: player-db-mongo
+    restart: always
+    image: mongo:5.0.14
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    volumes:
+      - player-db-volume:/var/lib/player-db-mongo
+
   match-svc:
+    container_name: match-svc
     image: match-svc
     build:
       context: ./match-svc
       dockerfile: /Dockerfile
+    restart: on-failure
     ports:
       - 8084:8084
+
+volumes:
+  tournament-db-volume:
+  player-db-volume:
